@@ -4,7 +4,6 @@ pipeline {
   stages {
     stage('Update changelog') {
       when {
-        beforeAgent true
         anyOf {
           branch 'master'
           expression { BRANCH_NAME ==~ /^\d+(.\d+)*$/ }
