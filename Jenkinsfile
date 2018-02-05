@@ -25,7 +25,17 @@ pipeline {
             passwordVariable: "GITHUB_TOKEN"]]) {
           sh "git changelog"
         }
-        echo "${BRANCH_NAME}"
+
+        sshagent(credentials: ['jenkins-hercules-ssh']) {
+          sh """
+          set -e
+          git diff
+          if ! git diff --quiet; then
+            git -c user.name="Hercules Mango Churchill" user.email="hercules@influxdata.com" commit -am "Update changelog"
+            git push origin HEAD:${BRANCH_NAME}
+          fi
+          """
+        }
       }
     }
   }
