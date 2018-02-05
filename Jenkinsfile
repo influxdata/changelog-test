@@ -3,6 +3,13 @@ pipeline {
 
   stages {
     stage('Update changelog') {
+      agent {
+        docker {
+          image      'jsternberg/changelog'
+          alwaysPull true
+        }
+      }
+
       when {
         anyOf {
           branch 'master'
