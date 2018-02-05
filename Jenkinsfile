@@ -11,7 +11,13 @@ pipeline {
       }
 
       steps {
-        echo "Updating CHANGELOG.md"
+        withCredentials(
+          [[$class: "UsernamePasswordMultiBinding",
+            credentialsId: "hercules-username-password",
+            usernameVariable: "GITHUB_USER",
+            passwordVariable: "GITHUB_TOKEN"]]) {
+          sh "git changelog"
+        }
       }
     }
   }
