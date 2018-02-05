@@ -25,6 +25,7 @@ pipeline {
             passwordVariable: "GITHUB_TOKEN"]]) {
           sh "git changelog"
         }
+        echo "${BRANCH_NAME}"
       }
     }
   }
