@@ -29,7 +29,7 @@ pipeline {
         sshagent(credentials: ['jenkins-hercules-ssh']) {
           sh """
           if ! git diff --quiet; then
-            git -c user.name='Hercules Mango Churchill' user.email='hercules@influxdata.com' commit -am 'Update changelog'
+            git -c user.name='Hercules Mango Churchill' -c user.email='hercules@influxdata.com' commit -am 'Update changelog'
             git push origin HEAD:${BRANCH_NAME}
           fi
           """
