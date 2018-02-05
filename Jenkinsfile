@@ -11,7 +11,7 @@ pipeline {
       }
 
       steps {
-        sh "Updating CHANGELOG.md"
+        echo "Updating CHANGELOG.md"
       }
     }
   }
