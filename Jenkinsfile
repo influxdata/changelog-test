@@ -3,13 +3,6 @@ pipeline {
 
   stages {
     stage('Update changelog') {
-      agent {
-        docker {
-          image      'jsternberg/changelog'
-          alwaysPull true
-        }
-      }
-
       when {
         anyOf {
           branch 'master'
@@ -18,12 +11,15 @@ pipeline {
       }
 
       steps {
-        withCredentials(
-          [[$class: "UsernamePasswordMultiBinding",
-            credentialsId: "hercules-username-password",
-            usernameVariable: "GITHUB_USER",
-            passwordVariable: "GITHUB_TOKEN"]]) {
-          sh "git changelog"
+        sh "docker pull jsternberg/changelog"
+        withDockerContainer(image: "jsternberg/changelog") {
+          withCredentials(
+            [[$class: "UsernamePasswordMultiBinding",
+              credentialsId: "hercules-username-password",
+              usernameVariable: "GITHUB_USER",
+              passwordVariable: "GITHUB_TOKEN"]]) {
+            sh "git changelog"
+          }
         }
 
         sshagent(credentials: ['jenkins-hercules-ssh']) {
