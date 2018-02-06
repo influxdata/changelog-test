@@ -12,15 +12,21 @@ pipeline {
 
       steps {
         sh "docker pull jsternberg/changelog"
-        script {
-          def commitId = currentBuild.getPreviousBuild().getAction(hudson.plugins.git.utils.BuildData).getLastBuiltRevision().getSha1();
-          withDockerContainer(image: "jsternberg/changelog") {
-            withCredentials(
-              [[$class: "UsernamePasswordMultiBinding",
-                credentialsId: "hercules-username-password",
-                usernameVariable: "GITHUB_USER",
-                passwordVariable: "GITHUB_TOKEN"]]) {
-              sh "git changelog ${commitId}"
+        withDockerContainer(image: "jsternberg/changelog") {
+          withCredentials(
+            [[$class: "UsernamePasswordMultiBinding",
+              credentialsId: "hercules-username-password",
+              usernameVariable: "GITHUB_USER",
+              passwordVariable: "GITHUB_TOKEN"]]) {
+            script {
+              import hudson.plugins.git.util.BuildData;
+              def lastBuild = currentBuild.lastSuccessfulBuild;
+              def commitId = lastBuild?.getAction(BuildData)?.lastBuiltRevision.sha1;
+              if (commitId) {
+                sh "git changelog ${commitId}"
+              } else {
+                sh "git changelog"
+              }
             }
           }
         }
