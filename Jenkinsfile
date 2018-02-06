@@ -1,3 +1,5 @@
+import hudson.plugins.git.util.BuildData
+
 pipeline {
   agent any
 
@@ -19,7 +21,6 @@ pipeline {
               usernameVariable: "GITHUB_USER",
               passwordVariable: "GITHUB_TOKEN"]]) {
             script {
-              import hudson.plugins.git.util.BuildData;
               def lastBuild = currentBuild.lastSuccessfulBuild;
               def commitId = lastBuild?.getAction(BuildData)?.lastBuiltRevision.sha1;
               if (commitId) {
