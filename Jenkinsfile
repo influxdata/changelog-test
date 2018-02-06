@@ -13,7 +13,7 @@ pipeline {
       steps {
         sh "docker pull jsternberg/changelog"
         script {
-          def commitId = currentBuild.getPreviousBuild().getChangeSets()[0].getCommitId();
+          def commitId = currentBuild.getPreviousBuild().getAction(hudson.plugins.git.utils.BuildData).getLastBuiltRevision().getSha1();
           withDockerContainer(image: "jsternberg/changelog") {
             withCredentials(
               [[$class: "UsernamePasswordMultiBinding",
