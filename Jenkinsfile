@@ -19,9 +19,8 @@ pipeline {
               usernameVariable: "GITHUB_USER",
               passwordVariable: "GITHUB_TOKEN"]]) {
             script {
-              def commitId = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
-              if (commitId) {
-                sh "git changelog ${commitId}"
+              if (env.GIT_PREVIOUS_SUCCESSFUL_COMMIT) {
+                sh "git changelog ${env.GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
               } else {
                 sh "git changelog"
               }
