@@ -21,7 +21,7 @@ pipeline {
               usernameVariable: "GITHUB_USER",
               passwordVariable: "GITHUB_TOKEN"]]) {
             script {
-              def lastBuild = currentBuild.lastSuccessfulBuild;
+              def lastBuild = currentBuild.getLastSuccessfulBuild();
               def commitId = lastBuild?.getAction(BuildData)?.lastBuiltRevision.sha1;
               if (commitId) {
                 sh "git changelog ${commitId}"
