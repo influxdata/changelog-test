@@ -4,9 +4,12 @@ pipeline {
   stages {
     stage('Update changelog') {
       when {
-        anyOf {
-          branch 'master'
-          expression { BRANCH_NAME ==~ /^\d+(.\d+)*$/ }
+        allOf {
+          anyOf {
+            branch 'master'
+            expression { BRANCH_NAME ==~ /^\d+(.\d+)*$/ }
+          }
+          expression { !currentBuild.nextBuild }
         }
       }
 
